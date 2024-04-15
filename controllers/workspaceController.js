@@ -12,8 +12,9 @@ const getAllWorkspaces = async(req, res) => {
     }
 }
 const createOneWorkspace = async(req, res) => {
+    let ws_id = workspaceData.length + 1;
     const workspace = new workspaceData({
-    id: req.body.id,
+    id: ws_id,
     owner: req.body.owner,
     title: req.body.title,
     location: req.body.location,
@@ -34,5 +35,25 @@ const createOneWorkspace = async(req, res) => {
         res.status(400).json({message: err.message});
     }
 }
-
-module.exports = {getAllWorkspaces, createOneWorkspace};
+const editOneWorkspace = async(req, res) => {
+    workspaceData.forEach(ws => {
+        if(ws.id == req.params.id)
+        {
+            ws.owner = req.body.owner,
+            ws.title = req.body.title,
+            ws.location = req.body.location,
+            ws.desc = req.body.desc,
+            ws.capacity = req.body.capacity,
+            ws.amenities = req.body.amenities,
+            ws.availability = req.body.availability,
+            ws.bookings = req.body.bookings
+        }
+    })
+    res.json(workspaceData);
+}
+const deleteOneWorkspace = async(req, res) => {
+    let index = workspaceData.findIndex(ws => ws.id == req.params.id);
+    workspaceData.splice(index, 1);
+    res.json(workspaceData);
+}
+module.exports = {getAllWorkspaces, createOneWorkspace, editOneWorkspace, deleteOneWorkspace};
