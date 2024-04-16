@@ -67,7 +67,8 @@ const createOneUser = async(req, res) => {
     userType: req.body.userType,
     username: req.body.username,
     password: req.body.password,
-    email: req.body.email
+    email: req.body.email,
+    phone: req.body.phone
     })
 
     try

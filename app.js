@@ -101,6 +101,7 @@ function authenticateToken(req, res, next) {
         next();
     })
 }
+// add logout
 // *********************************************
 
 // use routes
