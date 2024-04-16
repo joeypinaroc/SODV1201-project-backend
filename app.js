@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const workspaceRoutes = require('./routes/workspaceRoute');
 const userRoutes = require('./routes/userRoute');
+const bookingRoutes = require('./routes/bookingRoute');
 
 // connect to database using mongoose
 const connectToMongoDB = require('./connectDB');
@@ -107,7 +108,7 @@ function authenticateToken(req, res, next) {
 // use routes
 app.use(workspaceRoutes);
 app.use(userRoutes);
-
+app.use(bookingRoutes);
 
 app.listen(4236, () => {
     console.log('server is running');

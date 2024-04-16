@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
 const bookingSchema = new mongoose.Schema({
-    id: Number,
+    bookingId: Number,
     workspaceId: Number,
     workspaceName: String,
     owner: Number,
-    userId: Number,
-    username: String,
+    bookerId: Number,
+    bookerUsername: String,
     date: Date,
     price: Number
 }, {collection: 'bookings'})

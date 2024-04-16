@@ -13,8 +13,15 @@ const getAllUsers = async(req, res) => {
     }
 }
 const getOneUser = async(req, res) => {
-    let oneUser = userData.filter(user => user.id == req.params.id)
-    res.json(oneUser); 
+    try 
+    {
+        let oneUser = userData.filter(user => user.id == req.params.id)
+        res.json(oneUser); 
+    }
+    catch(err)
+    {
+        res.status(500).json({message: err.message});
+    }
 }
 const createOneUser = async(req, res) => {
     const user = new userData({
