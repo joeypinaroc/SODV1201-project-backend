@@ -15,7 +15,7 @@ const getAllUsers = async(req, res) => {
 const getOneUser = async(req, res) => {
     try 
     {
-        let oneUser = userData.filter(user => user.id == req.params.id)
+        let oneUser = await userData.find({"userId": req.params.id});
         res.json(oneUser); 
     }
     catch(err)
@@ -44,8 +44,22 @@ const createOneUser = async(req, res) => {
     }
 }
 const deleteOneUser = async(req, res) => {
-    let index = userData.findIndex(user => user.username == req.params.username)
-    userData.splice(index, 1);
+    try
+    {
+        let deletedUser = await userData.findOneAndDelete({"userId": req.params.id});
+        if(deletedUser == null)
+        {
+            res.status(404).json({message: 'Cannot find user'});
+        }
+        else
+        {
+            res.json(deletedUser);
+        }
+    }
+    catch(err)
+    {
+        res.status(500).json({message: err.message})
+    }
     res.json(userData);
 }
 module.exports = { getAllUsers, getOneUser, createOneUser, deleteOneUser };

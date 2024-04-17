@@ -6,6 +6,6 @@ const {getAllUsers, createOneUser, deleteOneUser, getOneUser} = require('../cont
 routerU.get('/user', getAllUsers);
 routerU.get('/user/:id', getOneUser);
 routerU.post('/user', createOneUser);
-routerU.delete('/user/:username', deleteOneUser);
+routerU.delete('/user/:id', deleteOneUser);
 
 module.exports = routerU;

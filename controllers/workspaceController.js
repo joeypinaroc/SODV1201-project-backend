@@ -12,8 +12,15 @@ const getAllWorkspaces = async(req, res) => {
     }
 }
 const getOneWorkspace = async(req, res) => {
-    let oneWs = workspaceData.filter(ws => ws.id == req.params.id)
-    res.json(oneWs);
+    try
+    {
+        let oneWs = await workspaceData.find({ "id": req.params.id });
+        res.json(oneWs);
+    }
+    catch(err)
+    {
+        res.status(500).json({message: err.message});
+    }
 }
 const createOneWorkspace = async(req, res) => {
     let ws_id = workspaceData.length + 1;
@@ -46,31 +53,34 @@ const createOneWorkspace = async(req, res) => {
     }
 }
 const editOneWorkspace = async(req, res) => {
-    workspaceData.forEach(ws => {
-        if(ws.id == req.params.id)
-        // use owner username
-        {
-            ws.owner = req.body.owner,
-            ws.title = req.body.title,
-            ws.location = req.body.location,
-            ws.desc = req.body.desc,
-            ws.capacity = req.body.capacity,
-            ws.amenities = req.body.amenities,
-            ws.address = req.body.address,
-            ws.squareFootage = req.body.squareFootage,
-            ws.parking = req.body.parking,
-            ws.publicTransport = req.body.publicTransport,
-            ws.smoking = req.body.smoking,
-            ws.price = req.body.price,
-            ws.availability = req.body.availability,
-            ws.bookings = req.body.bookings
-        }
-    })
-    res.json(workspaceData);
+    try
+    {
+        await workspaceData.findOneAndUpdate({"id": req.params.id}, req.body);
+        let updatedWorkspace = await workspaceData.find({"id": req.params.id});
+        res.status(201).json(updatedWorkspace);
+    }
+    catch(err)
+    {
+        res.status(400).json({message: err.message});
+    }
 }
 const deleteOneWorkspace = async(req, res) => {
-    let index = workspaceData.findIndex(ws => ws.id == req.params.id);
-    workspaceData.splice(index, 1);
+    try
+    {
+        let deletedWorkspace = await workspaceData.findOneAndDelete({"id": req.params.id});
+        if(deletedWorkspace == null)
+        {
+            res.status(404).json({message: 'Cannot find workspace'});
+        }
+        else
+        {
+            res.json(deletedWorkspace);
+        }
+    }
+    catch(err)
+    {
+        res.status(500).json({message: err.message})
+    }
     res.json(workspaceData);
 }
 module.exports = {getAllWorkspaces, getOneWorkspace, createOneWorkspace, editOneWorkspace, deleteOneWorkspace};
