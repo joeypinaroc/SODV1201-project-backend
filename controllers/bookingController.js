@@ -33,8 +33,22 @@ const createOneBooking = async(req, res) => {
     }
 }
 const deleteOneBooking = async(req, res) => {
-    let index = bookingData.findIndex(booking => booking.bookingId == req.params.bookingId)
-    bookingData.splice(index, 1);
+    try
+    {
+        let deletedBooking = await bookingData.findOneAndDelete({"id": req.params.id});
+        if(deletedBooking == null)
+        {
+            res.status(404).json({message: 'Cannot find booking'});
+        }
+        else
+        {
+            res.json(deletedBooking);
+        }
+    }
+    catch(err)
+    {
+        res.status(500).json({message: err.message})
+    }
     res.json(bookingData);
 }
 
