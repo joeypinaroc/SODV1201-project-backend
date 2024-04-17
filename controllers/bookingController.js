@@ -12,8 +12,9 @@ const getAllBookings = async(req, res) => {
     }
 }
 const createOneBooking = async(req, res) => {
+    let bk_id = await bookingData.countDocuments() + 1;
     const booking = new bookingData({
-        bookingId: req.body.bookingId,
+        bookingId: bk_id,
         workspaceId: req.body.workspaceId,
         workspaceName: req.body.workspaceName,
         owner: req.body.owner,

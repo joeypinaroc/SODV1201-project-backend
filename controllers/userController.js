@@ -24,8 +24,9 @@ const getOneUser = async(req, res) => {
     }
 }
 const createOneUser = async(req, res) => {
+    let user_id = await userData.countDocuments() + 1;
     const user = new userData({
-    userId: req.body.userId,
+    userId: user_id,
     userType: req.body.userType,
     username: req.body.username,
     password: req.body.password,
