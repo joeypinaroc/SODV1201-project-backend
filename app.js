@@ -34,18 +34,21 @@ app.post('/signup', async(req, res) => {
     try
     {
         // const hashedPassword = await bcrypt.hash(req.body.password, 10)
+        let id = await userData.countDocuments() + 1;
         const user = new userData({
+            userId: id,
             userType: req.body.userType, 
             username: req.body.username, 
             password: req.body.password, 
-            email: req.body.email 
+            email: req.body.email,
+            phone: req.body.phone 
         })
         // check if username or email is already registered
-        // const existingUser = await userData.findOne({ $or: [{ username }, { email }] });
-        // if(existingUser)
-        // {
-        //     return res.status(400).json({ message: 'Username or email is already registered'});
-        // }
+        const existingUser = await userData.findOne({ $or: [{ username: req.body.username }, { email: req.body.email }] });
+        if(existingUser)
+        {
+            return res.status(400).json({ message: 'Username or email is already registered'});
+        }
         // save to db
         const savedUser = await user.save();
         res.json(savedUser);
@@ -58,13 +61,13 @@ app.post('/signup', async(req, res) => {
 
 app.post('/login', async (req, res) => {
     // get user from db
-    // let user = { userType: req.body.userType, username: req.body.username, password: req.body.password, email: req.body.email }
-    let user = {
-        userType: "owner",
-        username: "ow1",
-        password: "abcv",
-        email: "ow1email"
-    }
+    let user = { userId: req.body.userId, userType: req.body.userType, username: req.body.username, password: req.body.password, email: req.body.email, phone: req.body.phone }
+    // let user = {
+    //     userType: "owner",
+    //     username: "ow1",
+    //     password: "abcv",
+    //     email: "ow1email"
+    // }
     try
     {
         // take password from frontend and compare to user from db
@@ -102,7 +105,7 @@ function authenticateToken(req, res, next) {
         next();
     })
 }
-// add logout
+// add logout in frontend
 // *********************************************
 
 // use routes
