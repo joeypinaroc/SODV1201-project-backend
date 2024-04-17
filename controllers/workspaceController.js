@@ -23,7 +23,7 @@ const getOneWorkspace = async(req, res) => {
     }
 }
 const createOneWorkspace = async(req, res) => {
-    let ws_id = workspaceData.length + 1;
+    let ws_id = await workspaceData.countDocuments() + 1;
     const workspace = new workspaceData({
     id: ws_id,
     owner: req.body.owner,
